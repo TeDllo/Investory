@@ -17,3 +17,6 @@ class CacheController(Controller):
 
     def set_state(self, id: int, state: BotState) -> None:
         self.data[id].state = state
+
+    def get_balance(self, id: int) -> int:
+        return self.data[id].balance

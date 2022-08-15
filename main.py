@@ -1,17 +1,21 @@
 import telebot
 from telegram.handler import MessageHandler
 from telegram.sender import TelegramSender
-from resources.keyboard_builder import KeyboardBuilder
+from generator.keyboard_builder import KeyboardBuilder
 from users.controller.cache_controller import CacheController
 
 from users.states import BotState
+from generator.message_builder import MessageBuilder
 
 TOKEN = "5459856405:AAEAdbjoytU_iWNmHDlFRO3yCocVyMnVYXw"
 
 bot = telebot.TeleBot(TOKEN)
 
 controller = CacheController()
-sender = TelegramSender(bot, KeyboardBuilder())
+sender = TelegramSender(bot,
+                        controller,
+                        MessageBuilder(controller),
+                        KeyboardBuilder())
 
 handler = MessageHandler(bot, controller, sender)
 

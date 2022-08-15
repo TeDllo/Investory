@@ -41,8 +41,6 @@ class MessageHandler:
             self.sender.send_balance(msg)
         elif msg.text == buttons.key_start_trading.text:
             self.sender.send_not_implemented(msg)
-            # self.controller.set_state(msg.from_user.id, BotState.TRADE_START)
-            # self.sender.send_start(bot, msg)
 
     def handle_my_portfolio(self, msg: types.Message) -> None:
         if msg.text == buttons.key_analytics.text:
@@ -53,8 +51,6 @@ class MessageHandler:
             self.sender.send_balance(msg)
         elif msg.text == buttons.key_start_trading.text:
             self.sender.send_not_implemented(msg)
-            # self.controller.set_state(msg.from_user.id, BotState.TRADE_START)
-            # self.sender.send_analytics(bot, msg)
         elif msg.text == buttons.key_quit.text:
             self.controller.set_state(msg.from_user.id, BotState.START)
             self.sender.send_start(msg)
@@ -65,5 +61,8 @@ class MessageHandler:
             self.sender.send_my_portfolio(msg)
         elif msg.text == buttons.key_start_trading.text:
             self.sender.send_not_implemented(msg)
-            # self.controller.set_state(msg.from_user.id, BotState.TRADE_START)
-            # self.sender.send_start(bot, msg)
+
+    def handle_trade_start(self, msg: types.Message) -> None:
+        if msg.text == buttons.key_quit.text:
+            self.controller.set_state(msg.from_user.id, BotState.TRADE_MODE)
+            self.sender.send_trade_mode(msg)
