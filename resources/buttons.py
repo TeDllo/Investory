@@ -13,3 +13,16 @@ key_how_to_get_portfolio = KeyboardButton(text="Как собрать портф
 key_checklist = KeyboardButton(text="Чек-лист начинающего инвестора")
 
 key_analytics = KeyboardButton(text="Портфельная аналитика")
+
+key_russian_shares = KeyboardButton(text="Российские акции")
+key_foreign_shares = KeyboardButton(text="Иностранные акции")
+
+key_back = KeyboardButton(text="Назад")
+key_quit_game = KeyboardButton(text="Выйти из игры")
+
+key_buy = KeyboardButton(text="Купить")
+key_sell = KeyboardButton(text="Продать")
+
+key_accept = KeyboardButton(text="Совершить сделку")
+key_continue = KeyboardButton(text="Продолжить торговлю")
+

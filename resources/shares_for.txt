@@ -1,0 +1,6 @@
+Apple /AAPL
+Alphabet Class C /GOOG
+Microsoft /MSFT
+NVIDIA /NVDA
+Tesla /TSLA
+WalMart /WMT
