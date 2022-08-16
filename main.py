@@ -1,52 +1,45 @@
 import telebot
-from telegram.handler import MessageHandler
-from telegram.sender import TelegramSender
-from generator.keyboard_builder import KeyboardBuilder
-from users.controller.cache_controller import CacheController
-
+from dependecies import DependencyMatcher
 from users.states import BotState
-from generator.message_builder import MessageBuilder
 
 TOKEN = "5459856405:AAEAdbjoytU_iWNmHDlFRO3yCocVyMnVYXw"
 
 bot = telebot.TeleBot(TOKEN)
-
-controller = CacheController()
-sender = TelegramSender(bot,
-                        controller,
-                        MessageBuilder(controller),
-                        KeyboardBuilder())
-
-handler = MessageHandler(bot, controller, sender)
+matcher = DependencyMatcher(bot)
 
 
 def get_lambda(state: BotState):
-    return lambda msg: controller.get_state(msg.from_user.id) == state
+    return lambda msg: matcher.controller.get_state(msg.from_user.id) == state
 
 
 @bot.message_handler(func=get_lambda(BotState.NOT_STARTED))
 def handle_not_started(message):
-    handler.handle_not_started(message)
+    matcher.handler.handle(message, BotState.NOT_STARTED)
 
 
 @bot.message_handler(func=get_lambda(BotState.START))
 def handle_start(message):
-    handler.handle_start(message)
+    matcher.handler.handle(message, BotState.START)
 
 
 @bot.message_handler(func=get_lambda(BotState.TRADE_MODE))
 def handle_trade_mode(message):
-    handler.handle_trade_mode(message)
+    matcher.handler.handle(message, BotState.TRADE_MODE)
 
 
 @bot.message_handler(func=get_lambda(BotState.MY_PORTFOLIO))
 def handle_my_portfolio(message):
-    handler.handle_my_portfolio(message)
+    matcher.handler.handle(message, BotState.MY_PORTFOLIO)
 
 
 @bot.message_handler(func=get_lambda(BotState.BALANCE))
 def handle_balance(message):
-    handler.handle_balance(message)
+    matcher.handler.handle(message, BotState.BALANCE)
+
+
+@bot.message_handler(func=get_lambda(BotState.TRADE_START))
+def handle_trade_start(message):
+    matcher.handler.handle(message, BotState.TRADE_START)
 
 
 bot.infinity_polling()

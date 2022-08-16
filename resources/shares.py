@@ -1,14 +1,22 @@
-def get_shares(filename) -> list[str]:
+from enum import Enum
+
+filename_rus = "resources/shares_rus.txt"
+filename_for = "resources/shares_for.txt"
+
+
+class ShareType(Enum):
+    RUSSIAN = 0
+    FOREIGN = 1
+
+
+def get_shares(type: ShareType) -> list[str]:
+    if type == ShareType.RUSSIAN:
+        filename = filename_rus
+    else:
+        filename = filename_for
+
     shares_list: list[str] = list()
-    with open(filename, "r") as shares:
+    with open(filename, "r", encoding="utf-8") as shares:
         for share in shares:
             shares_list.append(share)
     return shares_list
-
-
-def get_russian_shares() -> list[str]:
-    return get_shares("shares_rus.txt")
-
-
-def get_foreign_shares() -> list[str]:
-    return get_shares("shares_for.txt")

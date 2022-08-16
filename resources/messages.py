@@ -7,4 +7,10 @@ trade_rules = '''Вы в торговом режиме.
 useful_info = '''Ссылка на канал: https://t.me/investory_startup.
 Это вся полезная информация, которую я пока что знаю.'''
 
+trade_start = '''Выберите категорию'''
+
+shares_list = '''Выберите акцию, введя ее тикер:\n\n'''
+
 not_implemented = '''Сорян, это еще не доделали.'''
+wrong_command = '''Аккуратнее с языком, молодой человек'''
+incorrect_flag = 'wrong'

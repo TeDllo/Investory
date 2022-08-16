@@ -4,7 +4,7 @@ key_trade_mode = KeyboardButton(text="Торговый режим")
 key_useful = KeyboardButton(text="Полезные материалы")
 key_about = KeyboardButton(text="О проекте")
 
-key_quit = KeyboardButton(text="Выйти")
+key_quit_trade = KeyboardButton(text="Выйти из торгового режима")
 key_portfolio = KeyboardButton(text="Мой портфель")
 key_balance = KeyboardButton(text="Баланс")
 key_start_trading = KeyboardButton(text="Начать торговлю")
