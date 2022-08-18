@@ -22,9 +22,10 @@ class HowToMakePortfolioGenerator(MessageGenerator):
 
 class SharesChoiceGenerator(MessageGenerator):
     def get_message(self, msg: telebot.types.Message) -> str:
-        share_type = ShareType.RUSSIAN \
-            if msg.text == buttons.key_russian_shares.text \
-            else ShareType.FOREIGN
+        if msg.text == buttons.key_russian_shares.text:
+            share_type = ShareType.RUSSIAN
+        else:
+            share_type = ShareType.FOREIGN
 
         shares_list = "\n".join(
             map(
