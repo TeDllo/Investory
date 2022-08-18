@@ -18,7 +18,7 @@ key_russian_shares = KeyboardButton(text="Российские акции")
 key_foreign_shares = KeyboardButton(text="Иностранные акции")
 
 key_back = KeyboardButton(text="Назад")
-key_quit_game = KeyboardButton(text="Выйти из игры")
+key_quit_game = KeyboardButton(text="Закончить торговлю")
 
 key_buy = KeyboardButton(text="Купить")
 key_sell = KeyboardButton(text="Продать")
