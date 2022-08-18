@@ -1,6 +1,8 @@
 from enum import Enum
 
 class BotState(Enum):
+    NOT_IMPLEMENTED = -2
+
     NOT_STARTED = -1
     START = 0
 
@@ -12,7 +14,7 @@ class BotState(Enum):
 
     SHARES_CHOICE = 6
     SHARES_INFO = 7
-    SHARES_OPERATION = 8
+    SHARES_QUANTITY = 8
     SHARES_CONFIRMATION = 9
     SHARES_SUCCESS = 10
 
