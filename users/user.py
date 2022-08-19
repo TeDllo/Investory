@@ -20,7 +20,7 @@ class User:
         return Transaction(
             user_id=self.id,
             share=self.active_share,
-            price=self.price * self.quantity * self.active_share.lot_size,
+            price=round(self.price * self.quantity * self.active_share.lot_size, 2),
             quantity=self.quantity,
             action=self.action
         )
