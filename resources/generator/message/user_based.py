@@ -33,7 +33,12 @@ class SharesConfirmationGenerator(MessageGenerator):
 
     def get_message(self, msg: telebot.types.Message) -> str:
         op = self.controller.get_operation(msg.from_user.id)
-        return texts.shares_confirmation.format(op.action.value, op.share.name, op.quantity)
+        return texts.shares_confirmation.format(
+            op.action.value,
+            op.share.name,
+            op.quantity * op.share.lot_size,
+            op.price
+        )
 
 
 class SharesSuccessGenerator(MessageGenerator):

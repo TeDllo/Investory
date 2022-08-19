@@ -14,12 +14,12 @@ class CacheController(Controller):
         operation = self.data[id].get_active_transaction()
         sign = 1 if operation.action == Action.SELL else -1
 
-        self.data[id].balance += sign * operation.price * operation.quantity
+        self.data[id].balance += sign * operation.price
 
         if operation.share not in self.data[id].portfolio:
             self.data[id].portfolio[operation.share] = 0
 
-        self.data[id].portfolio[operation.share] -= sign * operation.quantity
+        self.data[id].portfolio[operation.share] -= sign * operation.quantity * operation.share.lot_size
 
         if self.data[id].portfolio[operation.share] <= 0:
             self.data[id].portfolio.pop(operation.share)

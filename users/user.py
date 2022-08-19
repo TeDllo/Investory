@@ -17,7 +17,13 @@ class User:
         self.portfolio: dict[Share, int] = {}
 
     def get_active_transaction(self) -> Transaction:
-        return Transaction(self.id, self.active_share, self.price, self.quantity, self.action)
+        return Transaction(
+            user_id=self.id,
+            share=self.active_share,
+            price=self.price * self.quantity * self.active_share.lot_size,
+            quantity=self.quantity,
+            action=self.action
+        )
 
     def get_portfolio(self) -> dict[Share, int]:
         return self.portfolio

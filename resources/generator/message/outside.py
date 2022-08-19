@@ -17,6 +17,6 @@ class SharesInfoGenerator(MessageGenerator):
         share = self.controller.get_share(msg.from_user.id)
         return texts.shares_info.format(
             share.name,
-            self.controller.get_price(msg.from_user.id)
-            # self.share_core.get_price(msg.text)
+            self.controller.get_price(msg.from_user.id),
+            share.lot_size
         )

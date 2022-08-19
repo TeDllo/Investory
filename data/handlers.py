@@ -26,7 +26,7 @@ class SharesChoiceHandler(DataHandler):
 
     def handle(self, msg: types.Message) -> None:
         self.check(msg)
-        if msg.text != buttons.key_back:
+        if msg.text != buttons.key_back.text:
             self.controller.set_share(msg.from_user.id,
                                       self.share_core.get_share(msg.text))
             self.controller.set_price(msg.from_user.id,
@@ -82,7 +82,7 @@ class SharesConfirmationHandler(DataHandler):
         self.controller.accept_trade(msg.from_user.id)
 
     def handle_buy(self, msg: types.Message, operation: Transaction) -> None:
-        if operation.price * operation.quantity > self.controller.get_balance(msg.from_user.id):
+        if operation.price > self.controller.get_balance(msg.from_user.id):
             raise IncorrectDataError("Недостаточно денег на балансе.")
 
     def handle_sell(self, msg: types.Message, operation: Transaction) -> None:

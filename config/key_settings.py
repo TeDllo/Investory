@@ -54,7 +54,7 @@ class KeySettings:
             BotState.TRADE_START: [
                 [buttons.key_russian_shares],
                 [buttons.key_foreign_shares],
-                [buttons.key_quit_trade]
+                [buttons.key_quit_game]
             ],
 
             BotState.SHARES_CHOICE: [

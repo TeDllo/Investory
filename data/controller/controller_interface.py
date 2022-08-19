@@ -10,7 +10,7 @@ class Controller:
     def set_state(self, id: int, state: BotState) -> None:
         pass
 
-    def get_balance(self, id: int) -> int:
+    def get_balance(self, id: int) -> float:
         pass
 
     def get_share(self, id: int) -> Share:

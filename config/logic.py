@@ -52,7 +52,7 @@ class AppLogic:
             },
 
             BotState.TRADE_START: {
-                buttons.key_quit_trade.text: BotState.TRADE_MODE,
+                buttons.key_quit_game.text: BotState.TRADE_MODE,
                 buttons.key_russian_shares.text: BotState.SHARES_CHOICE,
                 buttons.key_foreign_shares.text: BotState.SHARES_CHOICE
             },
