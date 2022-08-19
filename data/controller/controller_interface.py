@@ -16,6 +16,9 @@ class Controller:
     def get_share(self, id: int) -> Share:
         pass
 
+    def get_price(self, id: int) -> float:
+        pass
+
     def get_operation(self, id: int) -> Transaction:
         pass
 

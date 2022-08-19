@@ -35,6 +35,9 @@ class CacheController(Controller):
     def get_share(self, id: int) -> Share:
         return self.data[id].active_share
 
+    def get_price(self, id: int) -> float:
+        return self.data[id].price
+
     def get_operation(self, id: int) -> Transaction:
         return self.data[id].get_active_transaction()
 

@@ -2,7 +2,7 @@ import telebot
 
 from resources.generator.message.msg_gen import MessageGenerator
 from resources import texts, buttons
-from trade.shares.shares import ShareType, get_shares
+from trade.shares.shares import ShareType, ShareController
 
 
 class AboutGenerator(MessageGenerator):
@@ -21,6 +21,9 @@ class HowToMakePortfolioGenerator(MessageGenerator):
 
 
 class SharesChoiceGenerator(MessageGenerator):
+    def __init__(self, share_controller: ShareController):
+        self.share_controller = share_controller
+
     def get_message(self, msg: telebot.types.Message) -> str:
         if msg.text == buttons.key_russian_shares.text:
             share_type = ShareType.RUSSIAN
@@ -30,7 +33,7 @@ class SharesChoiceGenerator(MessageGenerator):
         shares_list = "\n".join(
             map(
                 lambda share: share.name + " " + share.ticker,
-                get_shares(share_type)
+                self.share_controller.load_shares(share_type)
             )
         )
         return texts.shares_list + shares_list

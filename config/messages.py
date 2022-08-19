@@ -12,7 +12,7 @@ class MessageConnector:
             BotState.ABOUT: AboutGenerator(),
             BotState.CHECK_LIST: CheckListGenerator(),
             BotState.HOW_TO_MAKE_PORTFOLIO: HowToMakePortfolioGenerator(),
-            BotState.SHARES_CHOICE: SharesChoiceGenerator(),
+            BotState.SHARES_CHOICE: SharesChoiceGenerator(share_core),
             BotState.SHARES_QUANTITY: SharesQuantityGenerator(),
             BotState.START: StartGenerator(),
             BotState.TRADE_MODE: TradeModeGenerator(),

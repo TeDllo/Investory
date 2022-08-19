@@ -1,13 +1,14 @@
 from config.states import BotState
 from telegram.handler import TransitionModule
 from resources import buttons
-from trade.shares.shares import ShareType, get_shares
+from trade.shares.shares import ShareType, ShareController
 
 
 class AppLogic:
-    def __init__(self, bridge: TransitionModule):
+    def __init__(self, bridge: TransitionModule, share_controller: ShareController):
         self.mapper: dict[BotState, dict[str, BotState]]
         self.bridge = bridge
+        self.share_controller = share_controller
 
         self.any_msg = {
             BotState.SHARES_QUANTITY: BotState.SHARES_CONFIRMATION
@@ -106,7 +107,7 @@ class AppLogic:
             }
         }
 
-        all_shares = get_shares(ShareType.RUSSIAN)
-        all_shares.extend(get_shares(ShareType.FOREIGN))
+        all_shares = self.share_controller.load_shares(ShareType.RUSSIAN)
+        all_shares.extend(self.share_controller.load_shares(ShareType.FOREIGN))
         for share in all_shares:
             self.mapper[BotState.SHARES_CHOICE][share.ticker] = BotState.SHARES_INFO
