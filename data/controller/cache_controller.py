@@ -1,9 +1,9 @@
+from config.states import BotState
+from data.controller.controller_interface import Controller
+from data.transaction import Transaction
 from resources import texts
 from trade.shares.shares import Action, Share
-from data.controller.controller_interface import Controller
-from config.states import BotState
 from users.user import User
-from data.transaction import Transaction
 
 
 class CacheController(Controller):

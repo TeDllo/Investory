@@ -1,8 +1,8 @@
 import telebot
 
+from data.controller.controller_interface import Controller
 from resources import texts
 from resources.generator.message.msg_gen import MessageGenerator
-from data.controller.controller_interface import Controller
 
 
 class AnalyticsGenerator(MessageGenerator):

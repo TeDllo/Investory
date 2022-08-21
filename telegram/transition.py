@@ -1,7 +1,7 @@
+from config.states import BotState
+from data.data_changer import DataChanger
 from data.handlers import IncorrectDataError
 from telegram.sender import TelegramSender
-from data.data_changer import DataChanger
-from config.states import BotState
 
 
 class TransitionModule:

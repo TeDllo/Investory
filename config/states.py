@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class BotState(Enum):
     NOT_IMPLEMENTED = -2
 

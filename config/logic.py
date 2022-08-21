@@ -1,6 +1,6 @@
 from config.states import BotState
-from telegram.handler import TransitionModule
 from resources import buttons
+from telegram.transition import TransitionModule
 from trade.shares.shares import ShareType, ShareController
 
 

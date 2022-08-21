@@ -1,4 +1,5 @@
 import telebot
+
 from config.dependecies import DependencyMatcher
 
 TOKEN = "5459856405:AAEAdbjoytU_iWNmHDlFRO3yCocVyMnVYXw"

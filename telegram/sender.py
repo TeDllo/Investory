@@ -1,10 +1,10 @@
 import telebot
-from resources.generator.keyboard_builder import KeyboardBuilder
 from telebot import types
 
-from resources import texts
 from config.states import BotState
 from data.controller.controller_interface import Controller
+from resources import texts
+from resources.generator.keyboard_builder import KeyboardBuilder
 from resources.generator.message_builder import MessageBuilder
 
 

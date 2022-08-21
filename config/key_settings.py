@@ -1,5 +1,6 @@
-from config.states import BotState
 from telebot.types import KeyboardButton
+
+from config.states import BotState
 from resources import buttons
 
 

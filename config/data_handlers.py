@@ -1,5 +1,5 @@
-from data.handlers import *
 from config.states import BotState
+from data.handlers import *
 
 
 class DataHandlersCore:

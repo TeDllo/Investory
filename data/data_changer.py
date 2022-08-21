@@ -1,8 +1,8 @@
 import telebot.types as tt
 
 from config.data_handlers import DataHandlersCore
-from data.controller.controller_interface import Controller
 from config.states import BotState
+from data.controller.controller_interface import Controller
 
 
 class DataChanger:

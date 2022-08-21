@@ -1,6 +1,6 @@
+from config.states import BotState
 from data.transaction import Transaction
 from trade.shares.shares import Share, Action
-from config.states import BotState
 
 
 class Controller:
