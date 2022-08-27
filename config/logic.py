@@ -104,6 +104,12 @@ class AppLogic:
                 buttons.key_quit_game.text: BotState.TRADE_MODE
             },
 
+            BotState.SHARES_CURRENCY_OFFER: {
+                buttons.key_exchange_accept.text: BotState.SHARES_SUCCESS,
+                buttons.key_back.text: BotState.SHARES_QUANTITY,
+                buttons.key_quit_game.text: BotState.TRADE_MODE
+            },
+
             BotState.SHARES_SUCCESS: {
                 buttons.key_continue.text: BotState.TRADE_START,
                 buttons.key_quit_game.text: BotState.TRADE_MODE

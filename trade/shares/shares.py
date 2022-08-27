@@ -39,7 +39,7 @@ class ShareController:
         return self.supplier.get_currency(ticker)
 
     def load_shares(self, currency: Currency) -> list[Share]:
-        if type == currency.rub:
+        if currency == Currency.rub:
             filename = filename_rus
         else:
             filename = filename_for

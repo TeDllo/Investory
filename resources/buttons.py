@@ -26,3 +26,4 @@ key_sell = KeyboardButton(text="Продать")
 key_accept = KeyboardButton(text="Совершить сделку")
 key_continue = KeyboardButton(text="Продолжить торговлю")
 
+key_exchange_accept = KeyboardButton(text="Обменять валюту и совершить сделку")

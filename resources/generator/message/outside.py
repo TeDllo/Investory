@@ -1,4 +1,5 @@
 import telebot
+from tinvest import Currency
 
 from data.controller.controller_interface import Controller
 from resources import texts
@@ -13,10 +14,16 @@ class SharesInfoGenerator(MessageGenerator):
         self.controller = controller
         self.share_core = share_core
 
+        self.signs = {
+            Currency.rub: "₽",
+            Currency.usd: "$"
+        }
+
     def get_message(self, msg: telebot.types.Message) -> str:
         share = self.controller.get_share(msg.from_user.id)
         return texts.shares_info.format(
             share.name,
             self.controller.get_price(msg.from_user.id),
+            self.signs[share.currency],
             share.lot_size
         )

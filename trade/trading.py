@@ -46,3 +46,7 @@ class TradeSupplier:
 
     def get_currency(self, ticker: str) -> Currency:
         return self.core.get_currency_by_ticker(ticker[1:])
+
+    def get_currency_price(self, currency: Currency) -> float:
+        if currency == Currency.usd:
+            return self.get_price("USD000UTSTOM")

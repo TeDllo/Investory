@@ -54,7 +54,7 @@ class SharesConfirmationGenerator(MessageGenerator):
             op.action.value,
             op.share.name,
             op.quantity * op.share.lot_size,
-            op.price
+            op.total
         )
 
 

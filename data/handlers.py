@@ -6,9 +6,13 @@ from resources import buttons, texts
 from trade.shares.shares import ShareController
 
 
-class IncorrectDataError(Exception):
+class DataError(Exception):
     def __init__(self, message):
         self.message = message
+
+
+class NotEnoughCurrencyError(Exception):
+    pass
 
 
 class DataHandler:
@@ -34,7 +38,7 @@ class SharesChoiceHandler(DataHandler):
 
     def check(self, msg: types.Message) -> None:
         if msg.text != buttons.key_back.text and self.share_core.get_share(msg.text) is None:
-            raise IncorrectDataError("Вы ввели неправильный тикер.")
+            raise DataError("Вы ввели неправильный тикер.")
 
 
 class SharesInfoHandler(DataHandler):
@@ -59,7 +63,7 @@ class SharesQuantityHandler(DataHandler):
 
     def check(self, msg: types.Message) -> None:
         if not msg.text.isnumeric() or int(msg.text) < 0:
-            raise IncorrectDataError("Введите ЦЕЛОЕ НЕОТРИЦАТЕЛЬНОЕ число, епт")
+            raise DataError("Введите ЦЕЛОЕ НЕОТРИЦАТЕЛЬНОЕ число, епт")
 
 
 class SharesConfirmationHandler(DataHandler):
@@ -77,24 +81,32 @@ class SharesConfirmationHandler(DataHandler):
         elif operation.action == Action.SELL:
             self.handle_sell(msg, operation)
         else:
-            raise IncorrectDataError("Ошибка: действие не назначено.")
+            raise DataError("Ошибка: действие не назначено.")
 
         self.controller.accept_trade(msg.from_user.id)
 
     def handle_buy(self, msg: types.Message, operation: Transaction) -> None:
-        if operation.price > self.controller.get_balance(msg.from_user.id, operation.share.currency):
-            raise IncorrectDataError("Недостаточно денег на балансе.")
+        delta = operation.total - self.controller.get_balance(msg.from_user.id, operation.share.currency)
+
+        if delta <= 0:
+            return
+
+        enough_another = False
+
+        if enough_another:
+            raise NotEnoughCurrencyError()
+        raise DataError("Недостаточно денег на балансе")
 
     def handle_sell(self, msg: types.Message, operation: Transaction) -> None:
         portfolio = self.controller.get_portfolio(msg.from_user.id)
         position = list(filter(lambda obj: obj.share.ticker == operation.share.ticker, portfolio))
         if len(position) == 0:
-            raise IncorrectDataError("В Вашем портфеле нет данной акции.")
+            raise DataError("В Вашем портфеле нет данной акции.")
 
         position = position[0]
 
         if operation.quantity > position.quantity:
-            raise IncorrectDataError(
+            raise DataError(
                 texts.shares_not_enough.format(
                     operation.quantity,
                     position.quantity

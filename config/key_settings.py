@@ -78,6 +78,11 @@ class KeySettings:
                 [buttons.key_back, buttons.key_quit_game]
             ],
 
+            BotState.SHARES_CURRENCY_OFFER: [
+                [buttons.key_exchange_accept],
+                [buttons.key_back, buttons.key_quit_game]
+            ],
+
             BotState.SHARES_SUCCESS: [
                 [buttons.key_continue],
                 [buttons.key_quit_game]

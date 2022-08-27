@@ -5,13 +5,15 @@ from data.controller.controller_interface import Controller
 from data.types import Currency, Position, Action, Transaction
 from trade.shares.shares import Share, ShareController
 
+INDENT = 2
+
 
 def add_user(user_data: dict) -> None:
-    with open("users/user_db.json", "r+") as user_db:
+    with open("users/user_db.json", "w") as user_db:
         source: dict = json.load(user_db)
         source.update(user_data)
         user_db.seek(0)
-        json.dump(source, user_db)
+        json.dump(source, user_db, indent=INDENT)
 
 
 def create_user(id: int) -> dict:
@@ -44,7 +46,7 @@ class JSONController(Controller):
         self.share_core = share_controller
 
     def has_user(self, id: int) -> bool:
-        with open(self.filename, "r+") as user_db:
+        with open(self.filename, "r") as user_db:
             return str(id) in json.load(user_db)
 
     def add_user(self, id: int) -> None:
@@ -52,15 +54,16 @@ class JSONController(Controller):
             source: dict = json.load(user_db)
             source.update(create_user(id))
             user_db.seek(0)
-            json.dump(source, user_db)
+            json.dump(source, user_db, indent=INDENT)
+            user_db.truncate()
 
     def get_balance(self, id: int, currency: Currency) -> float:
-        with open(self.filename, "r+") as user_db:
+        with open(self.filename, "r") as user_db:
             source: dict = json.load(user_db)
             return source[str(id)]["balance_" + currency.value.lower()]
 
     def get_share(self, id: int) -> Share:
-        with open(self.filename, "r+") as user_db:
+        with open(self.filename, "r") as user_db:
             source: dict = json.load(user_db)
             ticker = source[str(id)]["chosen_share"]
             return Share(
@@ -71,21 +74,21 @@ class JSONController(Controller):
             )
 
     def get_price(self, id: int) -> float:
-        with open(self.filename, "r+") as user_db:
+        with open(self.filename, "r") as user_db:
             source: dict = json.load(user_db)
             return source[str(id)]["chosen_price"]
 
     def get_operation(self, id: int) -> Transaction:
-        with open(self.filename, "r+") as user_db:
+        with open(self.filename, "r") as user_db:
             source: dict = json.load(user_db)
             return Transaction(id,
                                self.get_share(id),
-                               self.get_price(id),
+                               self.get_price(id) * source[str(id)]["chosen_quantity"],
                                source[str(id)]["chosen_quantity"],
                                Action(source[str(id)]["chosen_action"]))
 
     def get_portfolio(self, id: int) -> list[Position]:
-        with open(self.filename, "r+") as user_db:
+        with open(self.filename, "r") as user_db:
             source: dict = json.load(user_db)
             position_list = source[str(id)]["portfolio"]
             result: list[Position] = list()
@@ -107,7 +110,8 @@ class JSONController(Controller):
             source: dict = json.load(user_db)
             source[str(id)][field] = value
             user_db.seek(0)
-            json.dump(source, user_db)
+            json.dump(source, user_db, indent=INDENT)
+            user_db.truncate()
 
     def set_price(self, id: int, price: float):
         self.set_chosen_field(id, "chosen_price", price)
@@ -116,7 +120,7 @@ class JSONController(Controller):
         self.set_chosen_field(id, "chosen_share", share.ticker)
 
     def set_quantity(self, id: int, quantity: int):
-        self.set_chosen_field(id, "chosen_quantity", quantity)
+        self.set_chosen_field(id, "chosen_quantity", quantity * self.share_core.get_lot_size(self.get_share(id).ticker))
 
     def set_action(self, id: int, action: Action):
         self.set_chosen_field(id, "chosen_action", action.value)
