@@ -1,7 +1,9 @@
+from tinvest import Currency
+
 from config.states import BotState
 from resources import buttons
 from telegram.transition import TransitionModule
-from trade.shares.shares import ShareType, ShareController
+from trade.shares.shares import ShareController
 
 
 class AppLogic:
@@ -41,7 +43,8 @@ class AppLogic:
 
             BotState.BALANCE: {
                 buttons.key_portfolio.text: BotState.MY_PORTFOLIO,
-                buttons.key_start_trading.text: BotState.TRADE_START
+                buttons.key_start_trading.text: BotState.TRADE_START,
+                buttons.key_quit_trade.text: BotState.START
             },
 
             BotState.ANALYTICS: {
@@ -107,7 +110,7 @@ class AppLogic:
             }
         }
 
-        all_shares = self.share_controller.load_shares(ShareType.RUSSIAN)
-        all_shares.extend(self.share_controller.load_shares(ShareType.FOREIGN))
+        all_shares = self.share_controller.load_shares(Currency.rub)
+        all_shares.extend(self.share_controller.load_shares(Currency.usd))
         for share in all_shares:
             self.mapper[BotState.SHARES_CHOICE][share.ticker] = BotState.SHARES_INFO

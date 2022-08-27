@@ -1,8 +1,22 @@
 import telebot
+from tinvest import Currency
 
 from data.controller.controller_interface import Controller
+from data.types import Position
 from resources import texts
 from resources.generator.message.msg_gen import MessageGenerator
+
+
+def portfolio_to_text(portfolio: list[Position]) -> str:
+    text = ""
+
+    for position in portfolio:
+        text += texts.portfolio_share.format(position.share.name, position.quantity)
+
+    if len(text) == 0:
+        text = texts.portfolio_empty
+
+    return text
 
 
 class AnalyticsGenerator(MessageGenerator):
@@ -15,8 +29,9 @@ class BalanceGenerator(MessageGenerator):
         self.controller = controller
 
     def get_message(self, msg: telebot.types.Message) -> str:
-        balance = self.controller.get_balance(msg.from_user.id)
-        return texts.balance.format(balance)
+        balance_rub = self.controller.get_balance(msg.from_user.id, Currency.rub)
+        balance_usd = self.controller.get_balance(msg.from_user.id, Currency.usd)
+        return texts.balance.format(balance_rub, balance_usd)
 
 
 class MyPortfolioGenerator(MessageGenerator):
@@ -24,7 +39,9 @@ class MyPortfolioGenerator(MessageGenerator):
         self.controller = controller
 
     def get_message(self, msg: telebot.types.Message) -> str:
-        return texts.my_portfolio + self.controller.get_portfolio_text(msg.from_user.id)
+        portfolio = self.controller.get_portfolio(msg.from_user.id)
+
+        return texts.my_portfolio + portfolio_to_text(portfolio)
 
 
 class SharesConfirmationGenerator(MessageGenerator):
@@ -46,4 +63,5 @@ class SharesSuccessGenerator(MessageGenerator):
         self.controller = controller
 
     def get_message(self, msg: telebot.types.Message) -> str:
-        return texts.shares_success + self.controller.get_portfolio_text(msg.from_user.id)
+        portfolio = self.controller.get_portfolio(msg.from_user.id)
+        return texts.shares_success + portfolio_to_text(portfolio)

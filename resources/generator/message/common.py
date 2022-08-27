@@ -1,8 +1,9 @@
 import telebot
+from tinvest import Currency
 
-from resources.generator.message.msg_gen import MessageGenerator
 from resources import texts, buttons
-from trade.shares.shares import ShareType, ShareController
+from resources.generator.message.msg_gen import MessageGenerator
+from trade.shares.shares import ShareController
 
 
 class AboutGenerator(MessageGenerator):
@@ -26,9 +27,9 @@ class SharesChoiceGenerator(MessageGenerator):
 
     def get_message(self, msg: telebot.types.Message) -> str:
         if msg.text == buttons.key_russian_shares.text:
-            share_type = ShareType.RUSSIAN
+            share_type = Currency.rub
         else:
-            share_type = ShareType.FOREIGN
+            share_type = Currency.usd
 
         shares_list = "\n".join(
             map(

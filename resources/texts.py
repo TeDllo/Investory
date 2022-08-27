@@ -21,7 +21,10 @@ useful_info = '''Ссылка на канал: https://t.me/investory_startup.
 
 trade_start = '''Выберите категорию'''
 
-balance = '''Ваш баланс: {} ₽.'''
+balance = '''Ваш баланс:
+
+ {} ₽
+ {} $'''
 
 my_portfolio = '''Ваш портфель:\n\n'''
 portfolio_share = '''{}: {} шт.\n'''

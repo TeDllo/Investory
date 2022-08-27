@@ -1,12 +1,10 @@
 from data.transaction import Transaction
 from trade.shares.shares import Action, Share
-from config.states import BotState
 
 
 class User:
     def __init__(self, id: int):
         self.id = id
-        self.state = BotState.START
         self.balance: float = 100000
 
         self.active_share = None

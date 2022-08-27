@@ -49,7 +49,8 @@ class KeySettings:
             ],
 
             BotState.BALANCE: [
-                [buttons.key_portfolio, buttons.key_start_trading]
+                [buttons.key_portfolio, buttons.key_start_trading],
+                [buttons.key_quit_trade.text]
             ],
 
             BotState.TRADE_START: [

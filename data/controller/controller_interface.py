@@ -1,16 +1,14 @@
-from config.states import BotState
-from data.transaction import Transaction
-from trade.shares.shares import Share, Action
+from data.types import Currency, Position, Transaction, Share, Action
 
 
 class Controller:
-    def get_state(self, id: int) -> BotState:
+    def has_user(self, id: int) -> bool:
         pass
 
-    def set_state(self, id: int, state: BotState) -> None:
+    def add_user(self, id: int) -> None:
         pass
 
-    def get_balance(self, id: int) -> float:
+    def get_balance(self, id: int, currency: Currency) -> float:
         pass
 
     def get_share(self, id: int) -> Share:
@@ -22,10 +20,7 @@ class Controller:
     def get_operation(self, id: int) -> Transaction:
         pass
 
-    def get_portfolio(self, id: int) -> dict[Share, int]:
-        pass
-
-    def get_portfolio_text(self, id: int) -> str:
+    def get_portfolio(self, id: int) -> list[Position]:
         pass
 
     def accept_trade(self, id: int):

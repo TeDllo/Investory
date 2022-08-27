@@ -1,9 +1,9 @@
 from telebot import types
 
 from data.controller.controller_interface import Controller
-from data.transaction import Transaction
+from data.types import Action, Transaction
 from resources import buttons, texts
-from trade.shares.shares import ShareController, Action
+from trade.shares.shares import ShareController
 
 
 class IncorrectDataError(Exception):
@@ -82,18 +82,21 @@ class SharesConfirmationHandler(DataHandler):
         self.controller.accept_trade(msg.from_user.id)
 
     def handle_buy(self, msg: types.Message, operation: Transaction) -> None:
-        if operation.price > self.controller.get_balance(msg.from_user.id):
+        if operation.price > self.controller.get_balance(msg.from_user.id, operation.share.currency):
             raise IncorrectDataError("Недостаточно денег на балансе.")
 
     def handle_sell(self, msg: types.Message, operation: Transaction) -> None:
         portfolio = self.controller.get_portfolio(msg.from_user.id)
-        if operation.share not in portfolio:
+        position = list(filter(lambda obj: obj.share.ticker == operation.share.ticker, portfolio))
+        if len(position) == 0:
             raise IncorrectDataError("В Вашем портфеле нет данной акции.")
 
-        if operation.quantity > portfolio[operation.share]:
+        position = position[0]
+
+        if operation.quantity > position.quantity:
             raise IncorrectDataError(
                 texts.shares_not_enough.format(
                     operation.quantity,
-                    portfolio[operation.share]
+                    position.quantity
                 )
             )

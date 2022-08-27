@@ -1,27 +1,8 @@
-from enum import Enum
-
+from data.types import Share, Currency
 from trade.trading import TradeSupplier
 
 filename_rus = "trade/shares/shares_rus.txt"
 filename_for = "trade/shares/shares_for.txt"
-
-
-class Action(Enum):
-    BUY = "Купить"
-    SELL = "Продать"
-    NOTHING = "Ничего"
-
-
-class ShareType(Enum):
-    RUSSIAN = 0
-    FOREIGN = 1
-
-
-class Share:
-    def __init__(self, name: str, ticker: str, lot_size: int):
-        self.name = name
-        self.ticker = ticker
-        self.lot_size = lot_size
 
 
 class ShareController:
@@ -29,14 +10,24 @@ class ShareController:
         self.supplier = supplier
         self.shares_list: list[Share] = list()
 
-        for share_type in ShareType:
-            self.shares_list.extend(self.load_shares(share_type))
+        self.shares_list.extend(self.load_shares(Currency.rub))
+        self.shares_list.extend(self.load_shares(Currency.usd))
 
     def get_share(self, ticker: str):
         result = list(filter(lambda share: share.ticker == ticker, self.shares_list))
         if len(result) == 1:
             return result[0]
-        return None
+        new_share = Share(
+            self.get_name(ticker),
+            ticker,
+            self.get_lot_size(ticker),
+            self.get_currency(ticker)
+        )
+        self.shares_list.append(new_share)
+        return new_share
+
+    def get_name(self, ticker: str):
+        return self.supplier.get_name(ticker)
 
     def get_price(self, ticker: str):
         return self.supplier.get_price(ticker)
@@ -44,8 +35,11 @@ class ShareController:
     def get_lot_size(self, ticker: str):
         return self.supplier.get_lot_size(ticker)
 
-    def load_shares(self, type: ShareType) -> list[Share]:
-        if type == ShareType.RUSSIAN:
+    def get_currency(self, ticker: str) -> Currency:
+        return self.supplier.get_currency(ticker)
+
+    def load_shares(self, currency: Currency) -> list[Share]:
+        if type == currency.rub:
             filename = filename_rus
         else:
             filename = filename_for
@@ -59,6 +53,6 @@ class ShareController:
                 ticker = words[-1]
                 lot_size = self.get_lot_size(ticker)
 
-                shares_list.append(Share(name, ticker, lot_size))
+                shares_list.append(Share(name, ticker, lot_size, currency))
 
         return shares_list

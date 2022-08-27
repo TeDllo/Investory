@@ -10,7 +10,15 @@ class MessageHandler:
         self.trans = trans
         self.logic = logic
 
-    def handle(self, msg: types.Message, state: BotState) -> None:
+    def handle(self, msg: types.Message, state) -> None:
+        print(msg.from_user.id)
+
+        if state is None:
+            state = BotState.NOT_STARTED.value
+
+        state = BotState(state)
+        print("Current state: ", state)
+
         if state in self.logic.any_msg and msg.text not in self.logic.mapper[state]:
             self.trans.simple_transition(msg, state, self.logic.any_msg[state])
         else:

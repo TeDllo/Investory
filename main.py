@@ -10,7 +10,8 @@ matcher = DependencyMatcher(bot)
 
 @bot.message_handler(func=lambda msg: True)
 def handle_message(message):
-    state = matcher.controller.get_state(message.from_user.id)
+    state = bot.get_state(message.from_user.id)
+    # state = matcher.controller.get_state(message.from_user.id)
     matcher.handler.handle(message, state)
 
 

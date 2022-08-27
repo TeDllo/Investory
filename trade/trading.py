@@ -1,5 +1,7 @@
 import tinvest
 
+from data.types import Currency
+
 
 class TradeCore:
     def __init__(self, token: str):
@@ -22,13 +24,25 @@ class TradeCore:
     def get_price_by_ticker(self, ticker: str) -> float:
         return self.get_price_by_figi(self.get_figi_by_ticker(ticker))
 
+    def get_name_by_ticker(self, ticker: str) -> str:
+        return self.get_instrument_by_ticker(ticker).name
+
+    def get_currency_by_ticker(self, ticker: str) -> Currency:
+        return self.get_instrument_by_ticker(ticker).currency
+
 
 class TradeSupplier:
     def __init__(self, core: TradeCore):
         self.core = core
+
+    def get_name(self, ticker: str) -> str:
+        return self.core.get_name_by_ticker(ticker[1:])
 
     def get_price(self, ticker: str) -> float:
         return self.core.get_price_by_ticker(ticker[1:])
 
     def get_lot_size(self, ticker: str) -> int:
         return self.core.get_lot_by_ticker(ticker[1:])
+
+    def get_currency(self, ticker: str) -> Currency:
+        return self.core.get_currency_by_ticker(ticker[1:])
