@@ -40,6 +40,6 @@ class DependencyMatcher:
             self.controller
         )
         self.bridge = TransitionModule(self.changer, self.sender)
-        self.logic = AppLogic(self.bridge, self.share_core)
+        self.logic = AppLogic()
 
         self.handler = MessageHandler(self.bridge, self.logic)

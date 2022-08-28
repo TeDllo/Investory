@@ -8,14 +8,6 @@ from trade.shares.shares import Share, ShareController
 INDENT = 2
 
 
-def add_user(user_data: dict) -> None:
-    with open("users/user_db.json", "w") as user_db:
-        source: dict = json.load(user_db)
-        source.update(user_data)
-        user_db.seek(0)
-        json.dump(source, user_db, indent=INDENT)
-
-
 def create_user(id: int) -> dict:
     return {
         id: {
@@ -27,16 +19,15 @@ def create_user(id: int) -> dict:
             "chosen_action": "Ничего",
             "chosen_quantity": 0.0,
 
-            "portfolio": []
+            "portfolio": {}
         }
     }
 
 
-def create_position(position: Position) -> dict:
+def create_position() -> dict:
     return {
-        "share": position.share.ticker,
-        "quantity": position.quantity,
-        "total": position.total
+        "quantity": 0,
+        "total": 0.0
     }
 
 
@@ -90,12 +81,12 @@ class JSONController(Controller):
     def get_portfolio(self, id: int) -> list[Position]:
         with open(self.filename, "r") as user_db:
             source: dict = json.load(user_db)
-            position_list = source[str(id)]["portfolio"]
+            position_dict: dict = source[str(id)]["portfolio"]
             result: list[Position] = list()
 
-            for position_obj in position_list:
+            for ticker, position_obj in position_dict.items():
                 result.append(Position(
-                    self.share_core.get_share(position_obj["share"]),
+                    self.share_core.get_share(ticker),
                     position_obj["quantity"],
                     position_obj["total"]
                 ))
@@ -103,7 +94,32 @@ class JSONController(Controller):
             return result
 
     def accept_trade(self, id: int):
-        pass
+        op = self.get_operation(id)
+
+        with open(self.filename, "r+") as user_db:
+            source: dict = json.load(user_db)
+            portfolio: dict = source[str(id)]["portfolio"]
+
+            if op.share.ticker not in portfolio:
+                portfolio[op.share.ticker] = create_position()
+
+            position = portfolio[op.share.ticker]
+
+            sign = 1
+            if op.action == Action.SELL:
+                sign = -1
+
+            position["quantity"] += sign * op.quantity
+            position["total"] += sign * op.total
+
+            if position["quantity"] == 0:
+                portfolio.pop(op.share.ticker)
+
+            source[str(id)]["balance_" + op.share.currency.lower()] -= sign * op.total
+
+            user_db.seek(0)
+            json.dump(source, user_db, indent=INDENT)
+            user_db.truncate()
 
     def set_chosen_field(self, id: int, field: str, value: Any):
         with open(self.filename, "r+") as user_db:

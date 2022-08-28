@@ -38,6 +38,9 @@ class ShareController:
     def get_currency(self, ticker: str) -> Currency:
         return self.supplier.get_currency(ticker)
 
+    def exists(self, ticker: str) -> bool:
+        return self.supplier.exists(ticker)
+
     def load_shares(self, currency: Currency) -> list[Share]:
         if currency == Currency.rub:
             filename = filename_rus
@@ -50,7 +53,7 @@ class ShareController:
                 words = share.split()
 
                 name = " ".join(words[:-1])
-                ticker = words[-1]
+                ticker = words[-1][1:]
                 lot_size = self.get_lot_size(ticker)
 
                 shares_list.append(Share(name, ticker, lot_size, currency))

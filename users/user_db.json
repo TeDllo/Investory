@@ -1,11 +1,24 @@
 {
   "460400819": {
-    "balance_rub": 100000,
+    "balance_rub": 80552.8,
     "balance_usd": 0,
-    "chosen_share": "/WMT",
-    "chosen_price": 131.41,
+    "chosen_share": "GAZP",
+    "chosen_price": 183.62,
     "chosen_action": "\u041a\u0443\u043f\u0438\u0442\u044c",
-    "chosen_quantity": 20,
-    "portfolio": []
+    "chosen_quantity": 540,
+    "portfolio": {
+      "MGNT": {
+        "quantity": 3,
+        "total": 16378.5
+      },
+      "VTBR": {
+        "quantity": 30000,
+        "total": 547.2
+      },
+      "YNDX": {
+        "quantity": 9,
+        "total": 18900.0
+      }
+    }
   }
 }

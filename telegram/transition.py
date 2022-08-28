@@ -1,6 +1,6 @@
 from config.states import BotState
 from data.data_changer import DataChanger
-from data.handlers import DataError, NotEnoughCurrencyError
+from data.data_handlers import DataError, NotEnoughCurrencyError
 from telegram.sender import TelegramSender
 
 
@@ -16,10 +16,9 @@ class TransitionModule:
         self.sender.send_wrong_command(msg)
 
     def move(self, msg, state_from: BotState, state_to: BotState):
-        print("From {} to {}".format(state_from.name, state_to.name))
-
         try:
             self.changer.proceed(msg, state_from, state_to)
+            print("From {} to {}".format(state_from.name, state_to.name))
             self.sender.send(msg, state_to)
         except DataError as error:
             self.sender.send_error(msg, error.message)

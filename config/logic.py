@@ -1,24 +1,19 @@
-from tinvest import Currency
-
 from config.states import BotState
 from resources import buttons
-from telegram.transition import TransitionModule
-from trade.shares.shares import ShareController
 
 
 class AppLogic:
-    def __init__(self, bridge: TransitionModule, share_controller: ShareController):
+    def __init__(self):
         self.mapper: dict[BotState, dict[str, BotState]]
-        self.bridge = bridge
-        self.share_controller = share_controller
 
         self.any_msg = {
-            BotState.SHARES_QUANTITY: BotState.SHARES_CONFIRMATION
+            BotState.SHARES_QUANTITY: BotState.SHARES_CONFIRMATION,
+            BotState.SHARES_CHOICE: BotState.SHARES_INFO
         }
 
         self.mapper = {
             BotState.NOT_STARTED: {
-                "/start": BotState.START
+                "start": BotState.START
             },
 
             BotState.START: {
@@ -116,7 +111,14 @@ class AppLogic:
             }
         }
 
-        all_shares = self.share_controller.load_shares(Currency.rub)
-        all_shares.extend(self.share_controller.load_shares(Currency.usd))
-        for share in all_shares:
-            self.mapper[BotState.SHARES_CHOICE][share.ticker] = BotState.SHARES_INFO
+    def any(self, state: BotState) -> bool:
+        return state in self.any_msg
+
+    def has_text(self, state: BotState, text: str) -> bool:
+        return text in self.mapper[state]
+
+    def get_next(self, state: BotState, text: str) -> BotState:
+        return self.mapper[state][text]
+
+    def get_next_any(self, state: BotState) -> BotState:
+        return self.any_msg[state]

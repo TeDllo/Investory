@@ -37,7 +37,7 @@ class SharesChoiceHandler(DataHandler):
                                       self.share_core.get_price(msg.text))
 
     def check(self, msg: types.Message) -> None:
-        if msg.text != buttons.key_back.text and self.share_core.get_share(msg.text) is None:
+        if msg.text != buttons.key_back.text and not self.share_core.exists(msg.text):
             raise DataError("Вы ввели неправильный тикер.")
 
 

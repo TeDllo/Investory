@@ -33,7 +33,7 @@ class SharesChoiceGenerator(MessageGenerator):
 
         shares_list = "\n".join(
             map(
-                lambda share: share.name + " " + share.ticker,
+                lambda share: share.name + " /" + share.ticker,
                 self.share_controller.load_shares(share_type)
             )
         )

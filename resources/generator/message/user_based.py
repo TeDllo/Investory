@@ -48,13 +48,19 @@ class SharesConfirmationGenerator(MessageGenerator):
     def __init__(self, controller: Controller):
         self.controller = controller
 
+        self.signs = {
+            Currency.rub: "₽",
+            Currency.usd: "$"
+        }
+
     def get_message(self, msg: telebot.types.Message) -> str:
         op = self.controller.get_operation(msg.from_user.id)
         return texts.shares_confirmation.format(
             op.action.value,
             op.share.name,
-            op.quantity * op.share.lot_size,
-            op.total
+            op.quantity,
+            round(op.total, 2),
+            self.signs[op.share.currency]
         )
 
 
