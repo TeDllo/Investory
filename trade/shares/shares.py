@@ -38,6 +38,9 @@ class ShareController:
     def get_currency(self, ticker: str) -> Currency:
         return self.supplier.get_currency(ticker)
 
+    def get_currency_price(self, currency: Currency) -> float:
+        return self.supplier.get_currency_price(currency)
+
     def exists(self, ticker: str) -> bool:
         return self.supplier.exists(ticker)
 

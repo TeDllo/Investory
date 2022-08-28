@@ -50,7 +50,26 @@ class KeySettings:
 
             BotState.BALANCE: [
                 [buttons.key_portfolio, buttons.key_start_trading],
-                [buttons.key_quit_trade.text]
+                [buttons.key_exchange_currency, buttons.key_quit_trade]
+            ],
+
+            BotState.EXCHANGE: [
+                [buttons.key_buy_usd, buttons.key_buy_rub],
+                [buttons.key_back, buttons.key_quit_trade]
+            ],
+
+            BotState.EXCHANGE_QUANTITY: [
+                [buttons.key_back, buttons.key_quit_trade]
+            ],
+
+            BotState.EXCHANGE_CONFIRMATION: [
+                [buttons.key_accept],
+                [buttons.key_back, buttons.key_quit_trade]
+            ],
+
+            BotState.EXCHANGE_SUCCESS: [
+                [buttons.key_portfolio, buttons.key_start_trading],
+                [buttons.key_exchange_currency, buttons.key_quit_trade]
             ],
 
             BotState.TRADE_START: [
@@ -79,7 +98,7 @@ class KeySettings:
             ],
 
             BotState.SHARES_CURRENCY_OFFER: [
-                [buttons.key_exchange_accept],
+                [buttons.key_exchange_trade_accept],
                 [buttons.key_back, buttons.key_quit_game]
             ],
 

@@ -30,6 +30,8 @@ my_portfolio = '''Ваш портфель:\n\n'''
 portfolio_share = '''{}: {} шт.\n'''
 portfolio_empty = '''Пусто'''
 
+# shares begin
+
 shares_list = '''Выберите акцию, введя ее тикер:\n\n'''
 
 shares_info = '''Информация об акции:
@@ -46,6 +48,20 @@ shares_confirmation = '''Подтверждение:
 
 shares_not_enough = '''Недостаточно акций в портфеле.
 Требуется: {} ед., имеется: {} ед.'''
+
+shares_currency_offer = '''Недостаточно валюты на балансе.
+Вы можете обменять {}{} на {}{} по курсу 1$ = {}₽ и совершить сделку.'''
+
+# shares end
+
+# currency begin
+
+exchange_rate = "Текущий курс: 1$ = {}₽"
+exchange_offer = "Введите кол-во {}"
+exchange_confirmation = "Купить {}{} за {}{}"
+exchange_success = "Успешно!\n\n"
+
+# currency end
 
 not_implemented = '''Сорян, это еще не доделали.'''
 wrong_command = '''Аккуратнее с языком, молодой человек'''

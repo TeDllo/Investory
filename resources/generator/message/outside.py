@@ -27,3 +27,11 @@ class SharesInfoGenerator(MessageGenerator):
             self.signs[share.currency],
             share.lot_size
         )
+
+
+class ExchangeGenerator(MessageGenerator):
+    def __init__(self, share_core: ShareController):
+        self.share_core = share_core
+
+    def get_message(self, msg: telebot.types.Message) -> str:
+        return texts.exchange_rate.format(self.share_core.get_currency_price(Currency.usd))

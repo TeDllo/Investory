@@ -19,6 +19,10 @@ def create_user(id: int) -> dict:
             "chosen_action": "Ничего",
             "chosen_quantity": 0.0,
 
+            "chosen_currency": "",
+            "chosen_currency_price": 0.0,
+            "chosen_currency_quantity": 0,
+
             "portfolio": {}
         }
     }
@@ -48,26 +52,34 @@ class JSONController(Controller):
             json.dump(source, user_db, indent=INDENT)
             user_db.truncate()
 
-    def get_balance(self, id: int, currency: Currency) -> float:
+    def get_chosen_field(self, id: int, field: str) -> Any:
         with open(self.filename, "r") as user_db:
             source: dict = json.load(user_db)
-            return source[str(id)]["balance_" + currency.value.lower()]
+            return source[str(id)][field]
+
+    def get_balance(self, id: int, currency: Currency) -> float:
+        return self.get_chosen_field(id, "balance_" + currency.value.lower())
 
     def get_share(self, id: int) -> Share:
-        with open(self.filename, "r") as user_db:
-            source: dict = json.load(user_db)
-            ticker = source[str(id)]["chosen_share"]
-            return Share(
-                self.share_core.get_name(ticker),
-                ticker,
-                self.share_core.get_lot_size(ticker),
-                self.share_core.get_currency(ticker)
-            )
+        ticker = self.get_chosen_field(id, "chosen_share")
+        return Share(
+            self.share_core.get_name(ticker),
+            ticker,
+            self.share_core.get_lot_size(ticker),
+            self.share_core.get_currency(ticker)
+        )
 
     def get_price(self, id: int) -> float:
-        with open(self.filename, "r") as user_db:
-            source: dict = json.load(user_db)
-            return source[str(id)]["chosen_price"]
+        return self.get_chosen_field(id, "chosen_price")
+
+    def get_currency(self, id: int) -> Currency:
+        return Currency(self.get_chosen_field(id, "chosen_currency"))
+
+    def get_currency_price(self, id: int) -> float:
+        return self.get_chosen_field(id, "chosen_currency_price")
+
+    def get_currency_quantity(self, id: int) -> int:
+        return self.get_chosen_field(id, "chosen_currency_quantity")
 
     def get_operation(self, id: int) -> Transaction:
         with open(self.filename, "r") as user_db:
@@ -115,11 +127,31 @@ class JSONController(Controller):
             if position["quantity"] == 0:
                 portfolio.pop(op.share.ticker)
 
-            source[str(id)]["balance_" + op.share.currency.lower()] -= sign * op.total
+            source[str(id)]["balance_" + op.share.currency.lower()] = max(0.0, source[str(id)][
+                "balance_" + op.share.currency.lower()] - sign * op.total)
 
             user_db.seek(0)
             json.dump(source, user_db, indent=INDENT)
             user_db.truncate()
+
+    def accept_exchange(self, id: int):
+        currency = self.get_currency(id)
+        price = self.get_currency_price(id)
+
+        sign = -1
+        change_rub = self.get_currency_quantity(id)
+        change_usd = round(change_rub / price, 2)
+
+        if currency == Currency.usd:
+            sign = 1
+            change_usd = change_rub
+            change_rub = round(change_usd * price, 2)
+
+        balance_rub = self.get_balance(id, Currency.rub)
+        balance_usd = self.get_balance(id, Currency.usd)
+
+        self.set_chosen_field(id, "balance_rub", max(0.0, round(balance_rub - sign * change_rub, 2)))
+        self.set_chosen_field(id, "balance_usd", max(0.0, round(balance_usd + sign * change_usd, 2)))
 
     def set_chosen_field(self, id: int, field: str, value: Any):
         with open(self.filename, "r+") as user_db:
@@ -140,3 +172,12 @@ class JSONController(Controller):
 
     def set_action(self, id: int, action: Action):
         self.set_chosen_field(id, "chosen_action", action.value)
+
+    def set_currency(self, id: int, currency: Currency):
+        self.set_chosen_field(id, "chosen_currency", currency.value)
+
+    def set_currency_price(self, id: int, price: float):
+        self.set_chosen_field(id, "chosen_currency_price", price)
+
+    def set_currency_quantity(self, id: int, quantity: int):
+        self.set_chosen_field(id, "chosen_currency_quantity", quantity)

@@ -1,23 +1,39 @@
 {
   "460400819": {
-    "balance_rub": 80552.8,
-    "balance_usd": 0,
-    "chosen_share": "GAZP",
-    "chosen_price": 183.62,
+    "balance_rub": 0.0,
+    "balance_usd": 1305.78,
+    "chosen_share": "YNDX",
+    "chosen_price": 2100.0,
     "chosen_action": "\u041a\u0443\u043f\u0438\u0442\u044c",
-    "chosen_quantity": 540,
+    "chosen_quantity": 10,
+    "chosen_currency": "RUB",
+    "chosen_currency_price": 60.5,
+    "chosen_currency_quantity": 17829.1,
     "portfolio": {
-      "MGNT": {
-        "quantity": 3,
-        "total": 16378.5
-      },
-      "VTBR": {
-        "quantity": 30000,
-        "total": 547.2
-      },
       "YNDX": {
-        "quantity": 9,
-        "total": 18900.0
+        "quantity": 10,
+        "total": 21000.0
+      }
+    }
+  },
+  "604687957": {
+    "balance_rub": 89817.5,
+    "balance_usd": 1000000,
+    "chosen_share": "AAPL",
+    "chosen_price": 162.56,
+    "chosen_action": "\u041a\u0443\u043f\u0438\u0442\u044c",
+    "chosen_quantity": 1,
+    "chosen_currency": "USD",
+    "chosen_currency_price": 60.5,
+    "chosen_currency_quantity": 65.0,
+    "portfolio": {
+      "VTBR": {
+        "quantity": 10000,
+        "total": 200.0
+      },
+      "AAPL": {
+        "quantity": 1,
+        "total": 162.56
       }
     }
   }

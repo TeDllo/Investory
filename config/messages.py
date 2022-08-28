@@ -8,6 +8,8 @@ from config.states import BotState
 
 class MessageConnector:
     def __init__(self, controller: Controller, share_core: ShareController):
+        balance_generator = BalanceGenerator(controller)
+
         self.mapper: dict[BotState, MessageGenerator] = {
             BotState.ABOUT: AboutGenerator(),
             BotState.CHECK_LIST: CheckListGenerator(),
@@ -22,8 +24,14 @@ class MessageConnector:
             BotState.SHARES_INFO: SharesInfoGenerator(controller, share_core),
 
             BotState.ANALYTICS: AnalyticsGenerator(),
-            BotState.BALANCE: BalanceGenerator(controller),
+            BotState.BALANCE: balance_generator,
             BotState.MY_PORTFOLIO: MyPortfolioGenerator(controller),
             BotState.SHARES_CONFIRMATION: SharesConfirmationGenerator(controller),
-            BotState.SHARES_SUCCESS: SharesSuccessGenerator(controller)
+            BotState.SHARES_SUCCESS: SharesSuccessGenerator(controller),
+            BotState.SHARES_CURRENCY_OFFER: SharesCurrencyOfferGenerator(controller),
+
+            BotState.EXCHANGE: ExchangeGenerator(share_core),
+            BotState.EXCHANGE_QUANTITY: ExchangeQuantityGenerator(controller),
+            BotState.EXCHANGE_CONFIRMATION: ExchangeConfirmationGenerator(controller),
+            BotState.EXCHANGE_SUCCESS: ExchangeSuccessGenerator(balance_generator)
         }

@@ -1,4 +1,5 @@
 from telebot import types
+from tinvest import Currency
 
 from data.controller.controller_interface import Controller
 from data.types import Action, Transaction
@@ -62,8 +63,8 @@ class SharesQuantityHandler(DataHandler):
             self.controller.set_quantity(msg.from_user.id, int(msg.text))
 
     def check(self, msg: types.Message) -> None:
-        if not msg.text.isnumeric() or int(msg.text) < 0:
-            raise DataError("Введите ЦЕЛОЕ НЕОТРИЦАТЕЛЬНОЕ число, епт")
+        if not msg.text.isnumeric() or int(msg.text) <= 0:
+            raise DataError("Введите ЦЕЛОЕ ПОЛОЖИТЕЛЬНОЕ число, епт")
 
 
 class SharesConfirmationHandler(DataHandler):
@@ -86,14 +87,27 @@ class SharesConfirmationHandler(DataHandler):
         self.controller.accept_trade(msg.from_user.id)
 
     def handle_buy(self, msg: types.Message, operation: Transaction) -> None:
-        delta = operation.total - self.controller.get_balance(msg.from_user.id, operation.share.currency)
+        delta: float = operation.total - self.controller.get_balance(msg.from_user.id, operation.share.currency)
 
         if delta <= 0:
             return
 
-        enough_another = False
+        exchange_rate = self.share_core.get_currency_price(Currency.usd)
+
+        if operation.share.currency == Currency.usd:
+            total_need = delta * exchange_rate
+            currency_have = Currency.rub
+        else:
+            total_need = delta / exchange_rate
+            currency_have = Currency.usd
+
+        enough_another = self.controller.get_balance(msg.from_user.id, currency_have) >= total_need
 
         if enough_another:
+            self.controller.set_currency(msg.from_user.id, operation.share.currency)
+            self.controller.set_currency_price(msg.from_user.id, exchange_rate)
+            self.controller.set_currency_quantity(msg.from_user.id, delta)
+
             raise NotEnoughCurrencyError()
         raise DataError("Недостаточно денег на балансе")
 
@@ -112,3 +126,85 @@ class SharesConfirmationHandler(DataHandler):
                     position.quantity
                 )
             )
+
+
+class SharesCurrencyOffer(DataHandler):
+    def __init__(self, controller: Controller):
+        self.controller = controller
+
+    def handle(self, msg: types.Message) -> None:
+        if msg.text == buttons.key_exchange_trade_accept.text:
+            self.controller.accept_exchange(msg.from_user.id)
+            self.controller.accept_trade(msg.from_user.id)
+
+    def check(self, msg: types.Message) -> None:
+        pass
+
+
+class BalanceHandler(DataHandler):
+    def __init__(self, controller: Controller, share_core: ShareController):
+        self.controller = controller
+        self.share_core = share_core
+
+    def handle(self, msg: types.Message) -> None:
+        if msg.text == buttons.key_exchange_currency.text:
+            self.controller.set_currency_price(msg.from_user.id,
+                                               self.share_core.get_currency_price(Currency.usd))
+
+    def check(self, msg: types.Message) -> None:
+        pass
+
+
+class ExchangeHandler(DataHandler):
+    def __init__(self, controller: Controller):
+        self.controller = controller
+
+    def handle(self, msg: types.Message) -> None:
+        if msg.text == buttons.key_buy_rub.text:
+            self.controller.set_currency(msg.from_user.id, Currency.rub)
+        elif msg.text == buttons.key_buy_usd.text:
+            self.controller.set_currency(msg.from_user.id, Currency.usd)
+
+    def check(self, msg: types.Message) -> None:
+        pass
+
+
+class ExchangeQuantityHandler(DataHandler):
+    def __init__(self, controller: Controller):
+        self.controller = controller
+
+    def handle(self, msg: types.Message) -> None:
+        if msg.text not in [buttons.key_back.text, buttons.key_quit_trade.text]:
+            self.check(msg)
+            self.controller.set_currency_quantity(msg.from_user.id, float(msg.text))
+
+    def check(self, msg: types.Message) -> None:
+        if not msg.text.isnumeric() or float(msg.text) <= 0:
+            raise DataError("Введите ПОЛОЖИТЕЛЬНОЕ число, епт")
+
+
+class ExchangeConfirmationHandler(DataHandler):
+    def __init__(self, controller: Controller):
+        self.controller = controller
+
+    def handle(self, msg: types.Message) -> None:
+        if msg.text != buttons.key_accept.text:
+            return
+
+        currency = self.controller.get_currency(msg.from_user.id)
+        quantity = self.controller.get_currency_quantity(msg.from_user.id)
+        price = self.controller.get_currency_price(msg.from_user.id)
+
+        balance_from = self.controller.get_balance(msg.from_user.id, Currency.usd)
+        balance_to = self.controller.get_balance(msg.from_user.id, Currency.rub)
+
+        total = round(quantity / price, 2)
+
+        if currency == Currency.usd:
+            balance_from, balance_to = balance_to, balance_from
+            total = round(quantity * price, 2)
+
+        if balance_from < total:
+            raise DataError("Недостаточно валюты на балансе")
+
+        self.controller.accept_exchange(msg.from_user.id)

@@ -9,6 +9,10 @@ key_portfolio = KeyboardButton(text="💼 Мой портфель 💼")
 key_balance = KeyboardButton(text="💰 Баланс 💰")
 key_start_trading = KeyboardButton(text="➡ Начать торговлю ➡")
 
+key_exchange_currency = KeyboardButton(text="💱 Обменять валюту 💱")
+key_buy_usd = KeyboardButton(text="Купить $")
+key_buy_rub = KeyboardButton(text="Купить ₽")
+
 key_how_to_get_portfolio = KeyboardButton(text="⁉ Как собрать портфель ⁉")
 key_checklist = KeyboardButton(text="✅ Чек-лист начинающего инвестора ✅")
 
@@ -26,4 +30,4 @@ key_sell = KeyboardButton(text="📉 Продать 📉")
 key_accept = KeyboardButton(text="🌈 Совершить сделку 🌈")
 key_continue = KeyboardButton(text="↪ Продолжить торговлю ↪")
 
-key_exchange_accept = KeyboardButton(text="Обменять валюту и совершить сделку")
+key_exchange_trade_accept = KeyboardButton(text="Обменять валюту и совершить сделку")

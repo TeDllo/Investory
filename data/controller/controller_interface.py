@@ -23,7 +23,19 @@ class Controller:
     def get_portfolio(self, id: int) -> list[Position]:
         pass
 
+    def get_currency_quantity(self, id: int) -> float:
+        pass
+
+    def get_currency(self, id: int) -> Currency:
+        pass
+
+    def get_currency_price(self, id: int) -> float:
+        pass
+
     def accept_trade(self, id: int):
+        pass
+
+    def accept_exchange(self, id: int):
         pass
 
     def set_price(self, id: int, price: float):
@@ -36,4 +48,13 @@ class Controller:
         pass
 
     def set_share(self, id: int, share: Share):
+        pass
+
+    def set_currency_quantity(self, id: int, quantity: float):
+        pass
+
+    def set_currency(self, id: int, currency: Currency):
+        pass
+
+    def set_currency_price(self, id: int, price: float):
         pass

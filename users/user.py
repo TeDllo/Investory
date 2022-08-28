@@ -1,5 +1,4 @@
-from data.transaction import Transaction
-from trade.shares.shares import Action, Share
+from data.types import Transaction, Action, Share
 
 
 class User:
@@ -18,7 +17,7 @@ class User:
         return Transaction(
             user_id=self.id,
             share=self.active_share,
-            price=round(self.price * self.quantity * self.active_share.lot_size, 2),
+            total=round(self.price * self.quantity * self.active_share.lot_size, 2),
             quantity=self.quantity,
             action=self.action
         )

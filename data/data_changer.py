@@ -4,6 +4,7 @@ import telebot.types as tt
 from config.data_handlers import DataHandlersCore
 from config.states import BotState
 from data.controller.controller_interface import Controller
+from data.data_handlers import NotEnoughCurrencyError
 
 
 class DataChanger:
@@ -24,6 +25,10 @@ class DataChanger:
             self.controller.add_user(msg.from_user.id)
 
         if state_from in self.data_handler.mapper:
-            self.data_handler.mapper[state_from].handle(msg)
+            try:
+                self.data_handler.mapper[state_from].handle(msg)
+            except NotEnoughCurrencyError:
+                self.bot.set_state(msg.from_user.id, BotState.SHARES_CURRENCY_OFFER.value)
+                raise NotEnoughCurrencyError
 
         self.bot.set_state(msg.from_user.id, state_to.value)
