@@ -63,5 +63,5 @@ exchange_success = "Успешно!\n\n"
 
 # currency end
 
-not_implemented = '''Сорян, это еще не доделали.'''
+not_implemented = '''Просим прощения, это еще не доделали.'''
 wrong_command = '''Аккуратнее с языком, молодой человек'''
