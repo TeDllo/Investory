@@ -1,6 +1,6 @@
 from telebot.types import KeyboardButton
 
-key_trade_mode = KeyboardButton(text="🔞 Торговый режим 🔞")
+key_trade_mode = KeyboardButton(text="Торговый режим")
 key_useful = KeyboardButton(text="📖 Полезные материалы 📖")
 key_about = KeyboardButton(text="ℹ О проекте ℹ")
 
@@ -27,7 +27,7 @@ key_quit_game = KeyboardButton(text="⬅ Закончить торговлю ⬅
 key_buy = KeyboardButton(text="📈 Купить 📈")
 key_sell = KeyboardButton(text="📉 Продать 📉")
 
-key_accept = KeyboardButton(text="🌈 Совершить сделку 🌈")
-key_continue = KeyboardButton(text="↪ Продолжить торговлю ↪")
+key_accept = KeyboardButton(text="Совершить сделку")
+key_continue = KeyboardButton(text="Продолжить торговлю")
 
 key_exchange_trade_accept = KeyboardButton(text="Обменять валюту и совершить сделку")
